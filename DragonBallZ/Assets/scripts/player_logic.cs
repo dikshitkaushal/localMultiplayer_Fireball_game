@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,14 +28,18 @@ public class player_logic : MonoBehaviour
     bool isjumping = false;
     private float speed = 5f;
     bool issliding = false;
+    bool isdead = false;
     [SerializeField] playerid m_playerid=playerid._P1;
     bool iscasting = false;
     public GameObject slidingpos;
     public GameObject slidingpos2;
+    float respawntime = 3;
+    float timer;
 
     // Start is called before the first frame update
     void Start()
     {
+        timer = respawntime;
         m_animator = GetComponent<Animator>();
         m_charactercontroller = GetComponent<CharacterController>();
     }
@@ -42,6 +47,15 @@ public class player_logic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(isdead)
+        {
+            timer -= Time.deltaTime;
+            if (timer < 0)
+            {
+                respawn();
+            }
+            return;
+        }
         if(!issliding)
         {    
             m_horizontalaxis = Input.GetAxis("Horizontal" + m_playerid);
@@ -72,6 +86,17 @@ public class player_logic : MonoBehaviour
         }*/
 
     }
+
+    private void respawn()
+    {
+        timer = respawntime;
+        isdead = false;
+        if(m_animator)
+        {
+            m_animator.SetTrigger("respawn");
+        }
+    }
+
     private void FixedUpdate()
     {
         /*if(m_playerid==playerid._P1)
@@ -181,6 +206,14 @@ public class player_logic : MonoBehaviour
         else if (m_playerid == playerid._P2)
         {
             Instantiate(fireball, target2_p2.transform.position, transform.rotation);
+        }
+    }
+    public void die()
+    {
+        isdead = true;
+        if(m_animator)
+        {
+            m_animator.SetTrigger("die");
         }
     }
 }
