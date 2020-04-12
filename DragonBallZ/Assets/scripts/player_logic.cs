@@ -14,6 +14,7 @@ public class player_logic : MonoBehaviour
     Animator m_animator;
     public GameObject target1_p1;
     public GameObject target2_p2;
+    public GameObject fireball;
     CharacterController m_charactercontroller;
     float m_horizontalmove;
     float m_verticalmove;
@@ -26,7 +27,7 @@ public class player_logic : MonoBehaviour
     bool isjumping = false;
     private float speed = 5f;
     bool issliding = false;
-    [SerializeField] playerid m_playerid;
+    [SerializeField] playerid m_playerid=playerid._P1;
     bool iscasting = false;
     public GameObject slidingpos;
     public GameObject slidingpos2;
@@ -61,6 +62,7 @@ public class player_logic : MonoBehaviour
         }
         if (Input.GetButtonDown("Fire2" + m_playerid))
         {
+            m_charactercontroller.enabled = false;
             issliding = true;
             m_animator.SetTrigger("slide");
         }
@@ -119,10 +121,10 @@ public class player_logic : MonoBehaviour
         m_horizontalmove =  m_horizontalaxis * speed * Time.deltaTime;
         m_verticalmove = m_verticalaxis * speed * Time.deltaTime;
         m_totalmove = new Vector3(m_horizontalmove, 0, m_verticalmove);
-        if(issliding)
+        /*if (issliding)
         {
-            m_charactercontroller.enabled = false;
-        }
+            
+        }*/
         if (m_totalmove!=Vector3.zero)
         {
 
@@ -136,7 +138,7 @@ public class player_logic : MonoBehaviour
             m_totalmove = Vector3.zero;
         }
 
-        if (m_charactercontroller)
+        if (m_charactercontroller && !issliding)
         {
             m_charactercontroller.Move(m_totalmove + m_jump);
         }
@@ -158,14 +160,27 @@ public class player_logic : MonoBehaviour
         {
             transform.position = slidingpos.transform.position;
         }
-        else if(m_playerid==playerid._P2)
+        else if (m_playerid == playerid._P2)
         {
             transform.position = slidingpos2.transform.position;
         }
         issliding = iscontrolled;
-        if(!issliding)
+        if (!issliding)
         {
             m_charactercontroller.enabled = true;
+        }
+        
+        
+    }
+    public void fireballthrow()
+    {
+        if (m_playerid == playerid._P1)
+        {
+            Instantiate(fireball, target1_p1.transform.position, transform.rotation);
+        }
+        else if (m_playerid == playerid._P2)
+        {
+            Instantiate(fireball, target2_p2.transform.position, transform.rotation);
         }
     }
 }
