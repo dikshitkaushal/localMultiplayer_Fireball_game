@@ -121,6 +121,36 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &652267132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 652267133}
+  m_Layer: 0
+  m_Name: slidingposition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &652267133
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652267132}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.17384732, z: 6.53}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 688505934}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &688505929
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -218,7 +248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0c693f494539c4fba4b523200a3b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target1_p1: {fileID: 688505930}
+  target2_p2: {fileID: 1195198100}
   m_playerid: 0
+  slidingpos: {fileID: 652267132}
+  slidingpos2: {fileID: 0}
 --- !u!143 &688505932
 CharacterController:
   m_ObjectHideFlags: 0
@@ -237,6 +271,12 @@ CharacterController:
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.97, z: 0}
+--- !u!4 &688505934 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 2cb33413aa351f44baea85b3b83c66e5,
+    type: 3}
+  m_PrefabInstance: {fileID: 688505929}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +477,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: d2dc12768819dfc4e9a56510e4f944cb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.58743
+      value: -4.9
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d2dc12768819dfc4e9a56510e4f944cb,
         type: 3}
@@ -504,7 +544,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0c693f494539c4fba4b523200a3b52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target1_p1: {fileID: 688505930}
+  target2_p2: {fileID: 1195198100}
   m_playerid: 1
+  slidingpos: {fileID: 0}
+  slidingpos2: {fileID: 0}
 --- !u!143 &1195198102
 CharacterController:
   m_ObjectHideFlags: 0

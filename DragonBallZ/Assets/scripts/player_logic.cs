@@ -10,7 +10,10 @@ public enum playerid
 
 public class player_logic : MonoBehaviour
 {
+
     Animator m_animator;
+    public GameObject target1_p1;
+    public GameObject target2_p2;
     CharacterController m_charactercontroller;
     float m_horizontalmove;
     float m_verticalmove;
@@ -22,7 +25,11 @@ public class player_logic : MonoBehaviour
     float m_verticalaxis;
     bool isjumping = false;
     private float speed = 5f;
+    bool issliding = false;
     [SerializeField] playerid m_playerid;
+    bool iscasting = false;
+    public GameObject slidingpos;
+    public GameObject slidingpos2;
 
     // Start is called before the first frame update
     void Start()
@@ -34,19 +41,49 @@ public class player_logic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_horizontalaxis = Input.GetAxis("Horizontal"+m_playerid);
-        m_verticalaxis = Input.GetAxis("Vertical"+m_playerid);
-        if(m_animator)
-        {
-            m_animator.SetFloat("movement", Mathf.Max(Mathf.Abs(m_horizontalaxis), Mathf.Abs(m_verticalaxis)));
+        if(!issliding)
+        {    
+            m_horizontalaxis = Input.GetAxis("Horizontal" + m_playerid);
+            m_verticalaxis = Input.GetAxis("Vertical" + m_playerid);
+            if (m_animator)
+            {
+                m_animator.SetFloat("movement", Mathf.Max(Mathf.Abs(m_horizontalaxis), Mathf.Abs(m_verticalaxis)));
+            }
+            if (Input.GetButtonDown("Jump" + m_playerid) && m_charactercontroller.isGrounded)
+            {
+                isjumping = true;
+            }
+            if (Input.GetButtonDown("Fire1" + m_playerid))
+            {
+                iscasting = true;
+                m_animator.SetTrigger("fireball");
+            }
         }
-        if(Input.GetButtonDown("Jump"+m_playerid) && m_charactercontroller.isGrounded)
+        if (Input.GetButtonDown("Fire2" + m_playerid))
         {
-            isjumping = true;
+            issliding = true;
+            m_animator.SetTrigger("slide");
         }
+        /*if (issliding)
+        {
+            transform.position += transform.forward * Time.deltaTime * 5;
+        }*/
+
     }
     private void FixedUpdate()
     {
+        /*if(m_playerid==playerid._P1)
+        {
+            Vector3 direction = target2_p2.transform.position - transform.position;
+            Quaternion rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.124f);
+        }
+        if (m_playerid == playerid._P2)
+        {
+            Vector3 direction = target1_p1.transform.position - transform.position;
+            Quaternion rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.124f);
+        }*/
         //jumping logic
         if (isjumping)
         {
@@ -55,7 +92,7 @@ public class player_logic : MonoBehaviour
         }
         m_jump.y -= m_gravity * Time.deltaTime;
 
-
+        
 
         /* if (!m_charactercontroller.isGrounded)
          {
@@ -82,11 +119,23 @@ public class player_logic : MonoBehaviour
         m_horizontalmove =  m_horizontalaxis * speed * Time.deltaTime;
         m_verticalmove = m_verticalaxis * speed * Time.deltaTime;
         m_totalmove = new Vector3(m_horizontalmove, 0, m_verticalmove);
+        if(issliding)
+        {
+            m_charactercontroller.enabled = false;
+        }
         if (m_totalmove!=Vector3.zero)
         {
+
             transform.forward = m_totalmove.normalized;
             
         }
+
+
+        if (iscasting)
+        {
+            m_totalmove = Vector3.zero;
+        }
+
         if (m_charactercontroller)
         {
             m_charactercontroller.Move(m_totalmove + m_jump);
@@ -98,5 +147,25 @@ public class player_logic : MonoBehaviour
             m_jump.y = 0;
         }
 
+    }
+    public void iscastingfirvall(bool casting)
+    {
+        iscasting = casting;
+    }
+    public void ischaractercontroller(bool iscontrolled)
+    {
+        if (m_playerid == playerid._P1)
+        {
+            transform.position = slidingpos.transform.position;
+        }
+        else if(m_playerid==playerid._P2)
+        {
+            transform.position = slidingpos2.transform.position;
+        }
+        issliding = iscontrolled;
+        if(!issliding)
+        {
+            m_charactercontroller.enabled = true;
+        }
     }
 }

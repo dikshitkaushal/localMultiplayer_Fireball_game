@@ -6,12 +6,37 @@ ModelImporter:
   - first:
       74: -203655887218126122
     second: mixamo.com
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ganfaul_Body
+    second: {fileID: 2100000, guid: c5ec438a32995294b949230126b3835f, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ganfaul_diffuse
+    second: {fileID: 2800000, guid: 1b13d18afba76a049b874c1408c812c3, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ganfaul_glow
+    second: {fileID: 2800000, guid: 1742c44506aa4e34aa8e7e5f2a567a04, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ganfaul_normal
+    second: {fileID: 2800000, guid: 2db48bb2236f4ab48a2bafb2d9e35924, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ganfaul_specular
+    second: {fileID: 2800000, guid: 0d69183ab4f58b847a6bbd072c99592d, type: 3}
   materials:
     materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
