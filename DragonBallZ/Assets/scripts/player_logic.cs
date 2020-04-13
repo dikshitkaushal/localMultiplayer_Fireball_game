@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum playerid
 {
@@ -11,6 +12,11 @@ public enum playerid
 
 public class player_logic : MonoBehaviour
 {
+    public float power1 = 100f;
+    public float power2 = 100f;
+    float boostupspeed = 10f;
+    public Image poweramount1;
+    public Image poweramount2;
     public ParticleSystem continuouspower1;
     public ParticleSystem boostuppower1;
 
@@ -32,6 +38,7 @@ public class player_logic : MonoBehaviour
     bool isjumping = false;
     private float speed = 5f;
     bool issliding = false;
+    bool isreduced = false;
     bool isdead = false;
     [SerializeField] playerid m_playerid = playerid._P1;
     bool iscasting = false;
@@ -44,6 +51,7 @@ public class player_logic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        powerupordown();
         /*
         boostuppower1.enableEmission = false;
         boostuppower2.enableEmission = false;*/
@@ -86,8 +94,19 @@ public class player_logic : MonoBehaviour
             }
             if (Input.GetButtonDown("Fire1" + m_playerid))
             {
-                iscasting = true;
-                m_animator.SetTrigger("fireball");
+                
+                if (m_playerid == playerid._P1 && power1>0)
+                {
+                    iscasting = true;
+
+                    m_animator.SetTrigger("fireball");
+                }
+                if (m_playerid == playerid._P2 && power2>0)
+                {
+                    iscasting = true;
+
+                    m_animator.SetTrigger("fireball");
+                }
             }
             if (Input.GetButtonDown("Fire3" + m_playerid))
             {
@@ -109,6 +128,36 @@ public class player_logic : MonoBehaviour
             m_charactercontroller.enabled = false;
             issliding = true;
             m_animator.SetTrigger("slide");
+        }
+        if(iscasting && !isreduced)
+        {
+            isreduced = true;
+
+            if (m_playerid == playerid._P1)
+            {
+                power1 -= 20f;
+                powerupordown();
+
+            }
+            if (m_playerid == playerid._P2)
+            {
+                power2 -= 30f;
+                powerupordown();
+            }
+        }
+        if(isboostup)
+        {
+            if (m_playerid == playerid._P1 && power1<100)
+            {
+                power1 += Time.deltaTime * boostupspeed;
+                powerupordown();
+
+            }
+            if (m_playerid == playerid._P2 && power2<100)
+            {
+                power2 += Time.deltaTime * boostupspeed;
+                powerupordown();
+            }
         }
         if (issliding)
         {
@@ -233,6 +282,10 @@ public class player_logic : MonoBehaviour
     public void iscastingfirvall(bool casting)
     {
         iscasting = casting;
+        if (!iscasting)
+        {
+            isreduced = false;
+        }
     }
     public void ischaractercontroller(bool iscontrolled)
     {
@@ -294,6 +347,18 @@ public class player_logic : MonoBehaviour
             {
                 boostuppower2.Stop();
             }
+        }
+    }
+    void powerupordown()
+    {
+        if (m_playerid == playerid._P1)
+        {
+            poweramount1.fillAmount = power1/100;
+
+        }
+        if (m_playerid == playerid._P2)
+        {
+            poweramount2.fillAmount = power2/100;
         }
     }
 }
