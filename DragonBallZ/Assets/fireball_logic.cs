@@ -14,11 +14,13 @@ public class fireball_logic : MonoBehaviour
     [SerializeField] ParticleSystem exposion2;
     [SerializeField] ParticleSystem exposion3;
     [SerializeField] GameObject ball;
+    Collider m_collider;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        m_collider = GetComponent<Collider>();
         timer = Max_time;
         m_rigidbody = GetComponent<Rigidbody>();
         if(m_rigidbody)
@@ -41,9 +43,13 @@ public class fireball_logic : MonoBehaviour
         
         if (other.gameObject.tag == "Player")
         {
+            m_collider.enabled = false;
+
             player_logic m_playerlogic = other.GetComponent<player_logic>();
             if(m_playerlogic)
             {
+                m_playerlogic.m_charactercontroller.enabled = false;
+                
                 m_playerlogic.die();
             }
             exposion.Play(true);
@@ -52,6 +58,7 @@ public class fireball_logic : MonoBehaviour
         }
         if (other.gameObject.tag == "Fireball")
         {
+            m_collider.enabled = false;
             exposion1.Play(true);
             exposion2.Play(true);
             exposion3.Play(true);

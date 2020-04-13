@@ -11,12 +11,16 @@ public enum playerid
 
 public class player_logic : MonoBehaviour
 {
+    public ParticleSystem continuouspower1;
+    public ParticleSystem boostuppower1;
 
+    public ParticleSystem continuouspower2;
+    public ParticleSystem boostuppower2;
     Animator m_animator;
     public GameObject target1_p1;
     public GameObject target2_p2;
     public GameObject fireball;
-    CharacterController m_charactercontroller;
+    public CharacterController m_charactercontroller;
     float m_horizontalmove;
     float m_verticalmove;
     Vector3 m_jump;
@@ -29,9 +33,10 @@ public class player_logic : MonoBehaviour
     private float speed = 5f;
     bool issliding = false;
     bool isdead = false;
-    [SerializeField] playerid m_playerid=playerid._P1;
+    [SerializeField] playerid m_playerid = playerid._P1;
     bool iscasting = false;
     public GameObject slidingpos;
+    bool isboostup = false;
     public GameObject slidingpos2;
     float respawntime = 3;
     float timer;
@@ -39,6 +44,9 @@ public class player_logic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*
+        boostuppower1.enableEmission = false;
+        boostuppower2.enableEmission = false;*/
         timer = respawntime;
         m_animator = GetComponent<Animator>();
         m_charactercontroller = GetComponent<CharacterController>();
@@ -47,8 +55,16 @@ public class player_logic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isdead)
+        if (isdead)
         {
+            if (m_playerid == playerid._P1)
+            {
+                continuouspower1.Stop();
+            }
+            if (m_playerid == playerid._P2)
+            {
+                continuouspower2.Stop();
+            }
             timer -= Time.deltaTime;
             if (timer < 0)
             {
@@ -56,8 +72,8 @@ public class player_logic : MonoBehaviour
             }
             return;
         }
-        if(!issliding)
-        {    
+        if (!issliding)
+        {
             m_horizontalaxis = Input.GetAxis("Horizontal" + m_playerid);
             m_verticalaxis = Input.GetAxis("Vertical" + m_playerid);
             if (m_animator)
@@ -73,13 +89,43 @@ public class player_logic : MonoBehaviour
                 iscasting = true;
                 m_animator.SetTrigger("fireball");
             }
+            if (Input.GetButtonDown("Fire3" + m_playerid))
+            {
+                isboostup = true;
+                if (m_playerid == playerid._P1)
+                {
+                    boostuppower1.Play();
+                }
+                if (m_playerid == playerid._P2)
+                {
+                    boostuppower2.Play();
+                }
+                m_animator.SetTrigger("boostup");
+            }
         }
+
         if (Input.GetButtonDown("Fire2" + m_playerid))
         {
             m_charactercontroller.enabled = false;
             issliding = true;
             m_animator.SetTrigger("slide");
         }
+        if (issliding)
+        {
+            if (m_playerid == playerid._P1)
+            {
+                continuouspower1.Stop();
+            }
+            if (m_playerid == playerid._P2)
+            {
+                continuouspower2.Stop();
+            }
+        }
+        /*        if (!issliding)
+                {
+                    continuouspower1.enableEmission = true;
+                    continuouspower2.enableEmission = true;
+                }*/
         /*if (issliding)
         {
             transform.position += transform.forward * Time.deltaTime * 5;
@@ -89,9 +135,18 @@ public class player_logic : MonoBehaviour
 
     private void respawn()
     {
+        if (m_playerid == playerid._P1)
+        {
+            continuouspower1.Play();
+        }
+        if (m_playerid == playerid._P2)
+        {
+            continuouspower2.Play();
+        }
         timer = respawntime;
         isdead = false;
-        if(m_animator)
+        m_charactercontroller.enabled = true;
+        if (m_animator)
         {
             m_animator.SetTrigger("respawn");
         }
@@ -119,7 +174,7 @@ public class player_logic : MonoBehaviour
         }
         m_jump.y -= m_gravity * Time.deltaTime;
 
-        
+
 
         /* if (!m_charactercontroller.isGrounded)
          {
@@ -143,22 +198,22 @@ public class player_logic : MonoBehaviour
  */
         //moving logic
 
-        m_horizontalmove =  m_horizontalaxis * speed * Time.deltaTime;
+        m_horizontalmove = m_horizontalaxis * speed * Time.deltaTime;
         m_verticalmove = m_verticalaxis * speed * Time.deltaTime;
         m_totalmove = new Vector3(m_horizontalmove, 0, m_verticalmove);
         /*if (issliding)
         {
             
         }*/
-        if (m_totalmove!=Vector3.zero)
+        if (m_totalmove != Vector3.zero)
         {
 
             transform.forward = m_totalmove.normalized;
-            
+
         }
 
 
-        if (iscasting)
+        if (iscasting || isboostup)
         {
             m_totalmove = Vector3.zero;
         }
@@ -190,12 +245,20 @@ public class player_logic : MonoBehaviour
             transform.position = slidingpos2.transform.position;
         }
         issliding = iscontrolled;
+        if (m_playerid == playerid._P1)
+        {
+            continuouspower1.Play();
+        }
+        if (m_playerid == playerid._P2)
+        {
+            continuouspower2.Play();
+        }
         if (!issliding)
         {
             m_charactercontroller.enabled = true;
         }
-        
-        
+
+
     }
     public void fireballthrow()
     {
@@ -211,9 +274,26 @@ public class player_logic : MonoBehaviour
     public void die()
     {
         isdead = true;
-        if(m_animator)
+
+        if (m_animator)
         {
             m_animator.SetTrigger("die");
+        }
+    }
+    public void ispowerup(bool powerup)
+    {
+        isboostup = powerup;
+        if (!isboostup)
+        {
+            if (m_playerid == playerid._P1)
+            {
+                boostuppower1.Stop();
+                
+            }
+            if (m_playerid == playerid._P2)
+            {
+                boostuppower2.Stop();
+            }
         }
     }
 }
