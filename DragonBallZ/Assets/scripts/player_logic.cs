@@ -65,6 +65,7 @@ public class player_logic : MonoBehaviour
     {
         if (isdead)
         {
+            m_charactercontroller.enabled = false;
             if (m_playerid == playerid._P1)
             {
                 continuouspower1.Stop();
@@ -122,7 +123,7 @@ public class player_logic : MonoBehaviour
                 m_animator.SetTrigger("boostup");
             }
         }
-
+      
         if (Input.GetButtonDown("Fire2" + m_playerid))
         {
             m_charactercontroller.enabled = false;
@@ -141,7 +142,7 @@ public class player_logic : MonoBehaviour
             }
             if (m_playerid == playerid._P2)
             {
-                power2 -= 30f;
+                power2 -= 20f;
                 powerupordown();
             }
         }
@@ -203,6 +204,10 @@ public class player_logic : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(isdead)
+        {
+            return;
+        }
         /*if(m_playerid==playerid._P1)
         {
             Vector3 direction = target2_p2.transform.position - transform.position;
@@ -327,7 +332,7 @@ public class player_logic : MonoBehaviour
     public void die()
     {
         isdead = true;
-
+       
         if (m_animator)
         {
             m_animator.SetTrigger("die");

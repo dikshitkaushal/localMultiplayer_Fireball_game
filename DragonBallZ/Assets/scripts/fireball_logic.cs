@@ -49,7 +49,7 @@ public class fireball_logic : MonoBehaviour
             if(m_playerlogic)
             {
                 m_playerlogic.m_charactercontroller.enabled = false;
-                
+
                 m_playerlogic.die();
             }
             exposion.Play(true);
