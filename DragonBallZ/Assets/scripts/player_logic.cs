@@ -47,7 +47,8 @@ public class player_logic : MonoBehaviour
     public GameObject slidingpos2;
     float respawntime = 3;
     float timer;
-
+    public delegate void playerdeath(int num);
+    public static event playerdeath onplayerdeath;
     // Start is called before the first frame update
     void Start()
     {
@@ -337,6 +338,10 @@ public class player_logic : MonoBehaviour
         {
             m_animator.SetTrigger("die");
         }
+        if (onplayerdeath != null)
+        {
+            onplayerdeath(getplayernum());
+        }
     }
     public void ispowerup(bool powerup)
     {
@@ -365,5 +370,17 @@ public class player_logic : MonoBehaviour
         {
             poweramount2.fillAmount = power2/100;
         }
+    }
+    int getplayernum()
+    {
+        if (m_playerid == playerid._P1)
+        {
+            return 1;
+        }
+        else if (m_playerid == playerid._P2)
+        {
+            return 2;
+        }
+        return 0;
     }
 }
